@@ -9,7 +9,7 @@ def centrality(G,v):
     while len(linked)>0:
         current = linked[0]
         del linked[0]
-        for neighbor in G[v].keys():
+        for neighbor in G[current].keys():
             if neighbor not in distance_from_start:
                 distance_from_start[neighbor] = distance_from_start[current]+1
                 linked.append(neighbor)
