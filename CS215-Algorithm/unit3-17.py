@@ -8,7 +8,7 @@ def make_link(G, node1, node2):
     return G
 
 
-//give a graph G,note V1,V2, find the shortest path
+#give a graph G,note V1,V2, find the shortest path
 
 
 def path(G,v1,v2):
