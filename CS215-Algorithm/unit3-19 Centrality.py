@@ -6,7 +6,7 @@ def centrality(G,v):
     distance_from_start={}
     linked = [v]
     distance_from_start[v]=0
-    when len(linked)>0:
+    while len(linked)>0:
         current = linked[0]
         del linked[0]
         for neighbor in G[v].keys():
