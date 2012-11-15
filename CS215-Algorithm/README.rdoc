@@ -1,0 +1,9 @@
+
+notes for cs215:
+
+  solution for unit5-18 :
+  def expected_c(G,v):
+    neibors = G[v].keys()
+    degree = len(neighbors)
+    if degree == 1: return 0.0
+    else: return sum(1.0 for w in neighbors for x in neighbors if x in G[w])/(degree*(degree-1))
