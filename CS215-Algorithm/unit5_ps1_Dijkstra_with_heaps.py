@@ -3,8 +3,8 @@ def Dj(G,a):
     heap = [first_entry]
     dist_so_far = {a:first_entry}
     final_dist = {}
-    location ={ first_entry:0}
-    while len(dist_so_far)>1:
+    location ={first_entry:0}
+    while len(dist_so_far)>0:
         dist,node = heap_pop_min(heap,location)
         final_dist[node] = dist
         del dist_so_far[node]
@@ -21,21 +21,13 @@ def Dj(G,a):
                 dist_so_far[x] = new_entry
     return final_list
 
-
-
-
-
-
-
-
-
-
 def left(i):  return 2*i + 1
 def right(i): return 2*i + 2. 
 
-def swap(heap,old,new,location): 
-    heap[old],heap[new] = heap[new],heap[old]
-    location[heap[old]],location[heap[new]] = new, old
+def swap(heap, old, new, location):
+    location[heap[old]] = new
+    location[heap[new]] = old
+    (heap[old], heap[new]) = (heap[new], heap[old])
 
 def down_heap(heap,i,location):
     while True:
@@ -74,11 +66,11 @@ def heap_pop_min(heap,location):
     new_top = heap.pop()
     heap[0] = new_top
     location[v] = None
-    if len(heap) = 0:
-        return 0,v
-    location(new_top) = 0
+    if len(heap) == 0:
+        return v
+    location[new_top] = 0
     down_heap(heap,0,location)
-    return heap[location[new_top]][0],v
+    return v
 
 def insert_heap(heap,v,location):
     heap.append(v)
@@ -90,7 +82,4 @@ def decrease_val(heap,locatino,old_val,new_val):
     heap[i] = new_val
     location[old_val] = None
     location[new_val] = i 
-    up_heapify(heap,i,location)
-
-
-
+    up_heap(heap,i,location)
