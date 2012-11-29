@@ -39,8 +39,18 @@ def hand_rank(hand):
               (1,1,1,1,1):0} 
     return (max(points[count],5*flush+4*straight),ranks)
 
+hand_names = { 0:'hight card', 1:'pair', 2:'2pair', 3:'3pair', 4:'straight',
+        5: 'flush', 6:'full house', 7:'4kind', 8: 'none', 9: 'straight flush'}
 
+def hand_percentages(n=80000):
+    counts = [0]*10
+    for i in range (n/10):
+        for hand in deal_cards(10):
+            rank = hand_rank(hand)[0]
+            counts[rank]+= 1
+    for i in reversed(range(10)):
 
+        print "%14s: %6.3f %%" % (hand_names[i],100.*counts[i]/n)
 
     
 
@@ -63,7 +73,7 @@ def test():
     print 'you nailed it' 
 
 test()
-
+hand_percentages(n=100000)
 
 
 
