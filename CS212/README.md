@@ -3,9 +3,9 @@ what up! @yodeets, @j3
 
 #####I think i dont say enough in the video about why choose me,just to keep the video short. 
 
->  In case you didnt notice, my video post at [trevorvideo](http://trevorvideo.herokuapp.com) source code [here](https://github.com/thisiswei/trevorVideo) 
-
->  put Gschool on top of of hacker news [here](http://tophn.herokuapp.com) , code [here](https://github.com/thisiswei/tophn)
+>  In case you didnt notice, my video post at
+[trevorvideo](http://trevorvideo.herokuapp.com) source code
+[here](https://github.com/thisiswei/trevorVideo) ,put Gschool on top of of hacker news [here](http://tophn.herokuapp.com) , code [here](https://github.com/thisiswei/tophn)
 
 
 >  I finished [rubyKoans](https://github.com/thisiswei/RubyKoans), [learn ruby](https://github.com/thisiswei/learn_ruby) 3 udacity [courses](http://8aves.files.wordpress.com/2012/07/cs101cert.pdf) (4,if count the one i'm taking),finished bunch tutorails,including HungryAcademy -- solid foundation, hit the ground running 
