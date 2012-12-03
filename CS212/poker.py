@@ -1,16 +1,19 @@
-# Hey !! Gschool,j3,I dont think im a developer,but i just dont have any expertise in anything
-# here is some code that i wrote while learning CS212 in udacity
+"""
+Hey !! Gschool,j3,I dont think im a developer,but i just dont have any expertise in anything
+here is some code that i wrote while learning CS212 in udacity
 
-# I think i dont say enough in the video about why choose me,just to keep the video short. 
 
-# in case you didnt notice, my video post at trevorvideo.herokuapp.com
-# I put Gschool on top of of hacker news here: tophn.herokuapp.com  
+I think i dont say enough in the video about why choose me,just to keep the video short. 
+in case you didnt notice, my video post at trevorvideo.herokuapp.com
+I put Gschool on top of of hacker news here: tophn.herokuapp.com  
 
-# I finished rubyKoans, 3 - 4 udacity courses( one still going) -- solid foundation.
-# the code really dont mean much, just to show you I'm constantly learning,I just wrote a pigout game in this
-# repository, (dec/03) skip it if you dont have time ,and I make notes for books im reading in the Reading repository 
-   
-#   thanks for taking time  considering me !
+I finished rubyKoans, 3 - 4 udacity courses( one still going) -- solid foundation.
+the code really dont mean much, just to show you I'm constantly learning,I just wrote a pigout game in this
+repository, (dec/03) skip it if you dont have time ,and I make notes for books im reading in the Reading repository 
+  
+thanks for taking time  considering me !
+
+"""
 
 import random
 
