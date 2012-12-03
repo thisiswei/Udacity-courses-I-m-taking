@@ -20,7 +20,7 @@ what up! @yodeets, @j3
 * [lost and found](https://github.com/thisiswei/LostGreenCard) [demo](http://apprenticeme.herokuapp.com)
 
 
-#####the code really dont mean much, just to show you I'm constantly learning,(check out my github [score](gitscore.herokuapp.com))
+#####the code really dont mean much, just to show you I'm constantly learning,(check out my github [score](http://gitscore.herokuapp.com))
 
 > I just wrote a pigout [game](https://github.com/thisiswei/Udacity-courses-I-m-taking/blob/master/CS212/unit05_19_pig_out_max_win.py), (dec/03) skip it if you dont have time ,and I make notes for books im reading [here](https://github.com/thisiswei/reading) 
 
