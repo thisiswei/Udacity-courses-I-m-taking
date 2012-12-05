@@ -32,7 +32,7 @@ def faster_solve(formula):
     """Given a formula like 'ODD + ODD == EVEN', fill in digits to solve it.
     Input formula is a string; output is a digit-filled-in string or None.
     This version precompiles the formula; only one eval per formula."""
-    f, letters = compile_formula(formula)
+    f, letters = compile_formula(formula,verbose=False)
     for d in itertools.permutations( (1,2,3,4,5,6,7,8,9,0), len(letters) ):
         try: 
             if f(*d) is True:
@@ -42,14 +42,21 @@ def faster_solve(formula):
             pass
 
 def compile_formula(formula, verbose=False):
-    """Compile formula into a function.   Also return letters found, as a str,
+    """
+    Compile formula into a function.   Also return letters found, as a str,
     in same order as parms of function. For example, 'YOU == ME**2' returns
-    (lambda Y, M, E, U, O): (U+10*O+100*Y) == (E+10*M)**2), 'YMEUO' """
-    letters = ''.join( set(re.findall('[A-Z]',formula)) )
-    params  = ', '.join(letters) 
-    token   = map(compile_word,re.split('([A-Z]+)',formula))
-    body    = ''.join(token)
-    f       = 'lambda %s: %s' %(params, body)
+    (lambda Y, M, E, U, O): Y!=0 and M!= 0 and (U+10*O+100*Y) == (E+10*M)**2), 'YMEUO' 
+    """
+    
+    letters       = ''.join( set(re.findall('[A-Z]',formula)) )
+    first_letters = set ( re.findall(r'\b(A-Z)[A-Z]',formula) )
+    params        = ', '.join(letters) 
+    token         = map(compile_word,re.split('([A-Z]+)',formula))
+    body          = ''.join(token)
+    if first_letters:
+        tests     = ' and '.join(L+'!=0' for L in first_letters)
+        body      = '%s and %s' %(tests, body) 
+    f             = 'lambda %s: %s' %(params, body)
     if verbose: print f
     return eval(f), letters
 
