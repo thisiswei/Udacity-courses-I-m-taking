@@ -8,6 +8,7 @@ README in this repo,can better assist you get a piture of me :)
 
 
 import random
+import itertools
 
 
 
@@ -72,6 +73,30 @@ def deal_cards(numhands,n=5,deck=one_deck):
     return [deck[n*i:n*(i+1)] for i in range(numhands)]
 
 
+#-------dealing with seven card stud and joker------
+
+def best_hand(hand):
+    return max(itertools.combinations(hand,5),key=hand_rank)
+
+# blackjoker = '?B' ,red => '?R'
+def best_wild_hand(hand):
+    
+    hands = set( best_hand(h) for h in itertools.product(*map(replace,hand)) )
+    return max(hands, key = hand_rank)
+
+ranks  = '23456789TJQKA'
+rcards = [r+s for r in ranks for s in 'DH']
+bcards = [r+s for r in ranks for s in 'SC'] 
+
+def replace(card):
+    if card == '?B':
+        return bcards
+    if card == '?R':
+        return rcards
+    return [card]
+
+#------------ end -----------
+
 def test():
     hands = [['7S', '4S', '8H', '3D', 'AH'], ['QD', 'QH', 'JH', 'TH', '6C'],['JS', '5S', 'TS', '8S', '3S']]
     assert hand_rank(['5C','4C','3C','2C','AC']) == (9,(5,4,3,2,1))
@@ -79,9 +104,26 @@ def test():
     assert hand_rank(hands[1]) == (1,(12,11,10,6))
     assert hand_rank(hands[2]) == (5,(11,10,8,5,3))
     assert poker(hands) ==  [hands[2]]
-    print 'you nailed it' 
 
-test()
+    assert (sorted(best_hand("6C 7C 8C 9C TC 5C JS".split()))
+            == ['6C', '7C', '8C', '9C', 'TC'])
+    assert (sorted(best_hand("TD TC TH 7C 7D 8C 8S".split()))
+            == ['8C', '8S', 'TC', 'TD', 'TH'])
+    assert (sorted(best_hand("JD TC TH 7C 7D 7S 7H".split()))
+            == ['7C', '7D', '7H', '7S', 'JD']) 
+
+
+    assert (sorted(best_wild_hand("6C 7C 8C 9C TC 5C ?B".split()))
+            == ['7C', '8C', '9C', 'JC', 'TC'])
+    assert (sorted(best_wild_hand("TD TC 5H 5C 7C ?R ?B".split()))
+            == ['7C', 'TC', 'TD', 'TH', 'TS'])
+    assert (sorted(best_wild_hand("JD TC TH 7C 7D 7S 7H".split()))
+            == ['7C', '7D', '7H', '7S', 'JD'])
+    return 'you are a beast'
+
+
+
+print test()
 hand_percentages(n=100000)
 
 
