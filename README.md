@@ -1,8 +1,8 @@
 Dec/09 5:34pm
 ----
-***** started [S313: Introduction to Theoretical Computer Science](http://udacity.com/cs313) and [Applied Cryptography (CS387)](http://www.udacity.com/overview/Course/cs387/CourseRev/apr2012)
+ started [CS313: Introduction to Theoretical Computer Science](http://udacity.com/cs313) and [Applied Cryptography (CS387)](http://www.udacity.com/overview/Course/cs387/CourseRev/apr2012)
 
-***** bird by bird (motivate myself), I love udacity!
+ bird by bird (motivate myself), I love udacity!
 
 
 ###### Nov/25 2:58 am 
