@@ -12,20 +12,13 @@ def formula_name(coefs):
        (0, 0, 0, 1) => [x**3] => x**3 not 
                              1 * x**3 + 0 * x**2 + 0 * x**1
     """
-    body = reversed([name(pos,num) for (pos,num) in enumerate(coefs) if num != 0])
+    body = reversed([name(pos,num) for (pos,num) in enumerate(coefs) if num])
     return ' + '.join(body)
 
 def name(pos,num):
-    if pos == 0:
-        return str(num)
+    if pos == 0: return str(num)
     xnum = 'x' if pos == 1 else 'x**%s'%pos
     return xnum if num == 1 else '-%s'%xnum if num == -1 else '%s * %s'%(num,xnum)
-
-    assert add(poly((10, 20, 30)), poly((1, 2, 3))).coefs == (11,22,33)
-    assert sub(poly((10, 20, 30)), poly((1, 2, 3))).coefs == (9,18,27) 
-    assert mul(poly((10, 20, 30)), poly((1, 2, 3))).coefs == (10, 40, 100, 120, 90)
-    assert power(poly((1, 1)), 2).coefs == (1, 2, 1) 
-    assert power(poly((1, 1)), 10).coefs == (1, 10, 45, 120, 210, 252, 210, 120, 45, 10, 1)
                                              
 def is_poly(x):
     "Return true if x is a poly (polynomial)."
@@ -34,17 +27,21 @@ def is_poly(x):
 
 def add(p1, p2):
     "Return a new polynomial which is the sum of polynomials p1 and p2."
-    c1, c2 = p1.coefs, p2.coefs
-    new_c = [c1[i]+c2[i] for i in range(len(c1))]
-    return poly(new_c)
+    return combine(p1.coefs, p2.coefs)
+    
 
 def sub(p1, p2):
     "Return a new polynomial which is the difference of polynomials p1 and p2."
-    c1, c2 = p1.coefs, p2.coefs
-    new_c = [0 for i in range(len(c1))]
-    for (pos,num) in enumerate(c1): new_c[pos] = num
-    for (pos,num) in enumerate(c2): new_c[pos] -= num
-    return poly(new_c)
+    p3 = [-i for i in p2.coefs]
+    return combine(p1.coefs, tuple(p3))
+
+def combine(A, B):
+    maxlen = max(len(A), len(B))
+    n = [0 for i in range(maxlen)]
+    for (pos, item) in enumerate(A): n[pos] = item
+    for (pos, item) in enumerate(B): n[pos] += item
+    return poly(tuple(n)) 
+
 
 
 def mul(p1, p2):
@@ -58,6 +55,27 @@ def mul(p1, p2):
 
 def power(p, n):
     "Return a new polynomial which is p to the nth power (n a non-negative integer)."
+    return reduce(mul, [p]*n)
+
+"""deriviative of a polynomial term (c * x**n) is (c*n * x**(n-1)).
+The derivative of a sum is the sum of the derivatives.
+So the derivative of (30 * x**2 + 20 * x + 10) is (60 * x + 20).
+
+The integral is the anti-derivative:
+The integral of 60 * x + 20 is  30 * x**2 + 20 * x + C, for any constant C.
+Any value of C is an equally good anti-derivative.  We allow C as an argument
+to the function integral (withh default C=0).
+"""
+
+def deriv(p):
+    "Return the derivative of a function p (with respect to its argument)."
+    return poly(tuple(coe*pos for pos,coe in enumerate(p.coefs) if pos))
+
+
+def integral(p, C=0):
+    "Return the integral of a function p (with respect to its argument)."
+    params = tuple([C] + [num/(pos+1) for pos, num in enumerate(p.coefs)])
+    return poly((params))
 
 
 

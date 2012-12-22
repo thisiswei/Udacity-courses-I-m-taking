@@ -7,6 +7,7 @@
 | O . . . A A |  | 41 42 43 44 45 46  |
 | O . . . . . |  | 49 50 51 52 53 54  |
 | | | | | | | |  |  |  |  |  |  |  |  | 
+
 puzzle1 = (
  ('G', (9, 10)),
  ('B', (20, 28, 36)), 
@@ -18,11 +19,33 @@ puzzle1 = (
  ('O', (41, 49)), 
  ('|', (0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 23, 24, 32, 39,
         40, 47, 48, 55, 56, 57, 58, 59, 60, 61, 62, 63)))
-"""
-N = 8
 
+mission: move the car(**) to @ while GG,AA,** can only move left right, others updown
+"""
+
+N = 8 
 def solve_parking_puzzle(start, N=N):
     return shortest_path_search(start, find_spots, is_goal) 
+
+def shortest_path_search(start, successors, is_goal):
+    """Find the shortest path from start state to a state
+    such that is_goal(state) is true."""
+    if is_goal(start):
+        return [start]
+    explored = set() # set of states we have visited
+    frontier = [ [start] ] # ordered list of paths we have blazed
+    while frontier:
+        path = frontier.pop(0)
+        s = path[-1]
+        for (state, action) in successors(s).items():
+            if state not in explored:
+                explored.add(state)
+                path2 = path + [action, state]
+                if is_goal(state):
+                    return path2
+                else:
+                    frontier.append(path2)
+    return []
 
 def find_spots(state): 
     succ = {}
@@ -73,7 +96,6 @@ def replace(dicts, key, diff):
 
 
 def locs(start, n, incr=1):
-    "Return a tuple of n locations, starting at start and incrementing by incr."
     " locs(13,2) => (13, 14), locs(8, 3, 8) == (8, 16, 24) "
     return tuple(start + incr*i for i in range(n))
 
@@ -87,6 +109,7 @@ def grid(cars, N=N):
     pair, like ('@', (31,)), to indicate this. The variable 'cars'  is a
     tuple of pairs like ('*', (26, 27)). The return result is a big tuple
     of the 'cars' pairs along with the walls and goal pairs.""" 
+
     goal = N*(N/2) - 1 
     top_walls = locs(0, N)
     side_walls = tuple(locs(N*i, 2, N-1) for i in range(1,N-1))
@@ -133,28 +156,9 @@ puzzle3 = grid((
     ('O', locs(45, 2, N)),
     ('Y', locs(49, 3))))
 
-def shortest_path_search(start, successors, is_goal):
-    """Find the shortest path from start state to a state
-    such that is_goal(state) is true."""
-    if is_goal(start):
-        return [start]
-    explored = set() # set of states we have visited
-    frontier = [ [start] ] # ordered list of paths we have blazed
-    while frontier:
-        path = frontier.pop(0)
-        s = path[-1]
-        for (state, action) in successors(s).items():
-            if state not in explored:
-                explored.add(state)
-                path2 = path + [action, state]
-                if is_goal(state):
-                    return path2
-                else:
-                    frontier.append(path2)
-    return []
-
 def path_actions(path):
     "Return a list of actions in this path."
-    return path[1::2]
+    return path[1::2]  
+ 
 
 
