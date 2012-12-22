@@ -20,11 +20,16 @@ puzzle1 = (
  ('|', (0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 16, 23, 24, 32, 39,
         40, 47, 48, 55, 56, 57, 58, 59, 60, 61, 62, 63)))
 
-mission: move the car(**) to @ while GG,AA,** can only move left right, others updown
+GG(9,10)->GG(10,11),..<-AA(44,45)<-AA(45,46),** can only move left right, YYY,PPP,OO,BBB updown
+each car either occupy two spot or three.
+
+mission: move the car(**) to @ 
 """
+import doctest
 
 N = 8 
 def solve_parking_puzzle(start, N=N):
+    "find_spots finds all the possible state,action return as a dict" 
     return shortest_path_search(start, find_spots, is_goal) 
 
 def shortest_path_search(start, successors, is_goal):
@@ -52,14 +57,15 @@ def find_spots(state):
     dicts = dict(state)
     cars = [k for k in dicts.keys() if k not in '@|'] 
     for car in cars: 
-        carspot = dicts.get(car)
-        distance = carspot[1] - carspot[0]
-        around_spots = is_movable(carspot, distance, dicts)
-        if around_spots: 
+        carspot = dicts.get(car) # A => (45, 46)
+        distance = carspot[1] - carspot[0] # move B(20, 28, 36) up(20+dist..)
+        around_spots = is_movable(carspot, distance, dicts)# A=>(42,46) 
+        if around_spots:            #originalA(45,46) => frontspace = 45-42
             frontspace, backspace = calculate_space(carspot, around_spots)
             if frontspace:
-                for i in range(int(frontspace/distance)): 
+                for i in range(int(frontspace/distance)): #A: 3/1, B: 8/8
                     succ[replace(dicts, car, -distance*(i+1))] = (car,-distance*(i+1)) 
+                    # new_state: action  {..,'A': (44,45).. } :('A', -1)
             if backspace:
                 for i in range(int(backspace/distance)):
                     succ[replace(dicts, car, distance*(i+1))] = (car, distance*(i+1)) 
@@ -68,8 +74,8 @@ def find_spots(state):
 def is_movable(carspot, distance, dicts):
     car_front, car_back = carspot[0], carspot[-1] 
     front, back = empties(car_front, -distance, dicts), empties(car_back, distance, dicts)
-    if front != car_front or back != car_back:
-        return front, back
+    if front != car_front or back != car_back: # fn(empties) will return farthest empty spot it can reach
+        return front, back                     # if not will return original params 
     else: 
         return False  
 
@@ -82,8 +88,9 @@ def empties(location, distance, dicts):
         return empties(location + distance, distance, dicts) 
 
 def is_goal(state):
-    s = dict(state)
-    return set(s['*']) & set(s['@']) 
+    s = dict(state)  
+    return set(s['*']) & set(s['@'])  # when '*' and '@' have the same value.
+
 
 def calculate_space(carspot, around_spots):
     return min(carspot)-min(around_spots), max(around_spots)-max(carspot) 
@@ -92,7 +99,8 @@ def replace(dicts, key, diff):
     new_d = dicts.copy()
     new_val = tuple([val+diff for val in dicts[key]])
     new_d[key] = new_val
-    return tuple([(k, v) for k, v in new_d.items()]) 
+    return tuple((k, v) for k, v in new_d.items()) 
+       #return as key for dictionary,gotta be hashable
 
 
 def locs(start, n, incr=1):
@@ -102,13 +110,8 @@ def locs(start, n, incr=1):
 
 
 def grid(cars, N=N):
-    """Return a tuple of (object, locations) pairs -- the format expected for
-    this puzzle.  This function includes a wall pair, ('|', (0, ...)) to 
-    indicate there are walls all around the NxN grid, except at the goal 
-    location, which is the middle of the right-hand wall; there is a goal
-    pair, like ('@', (31,)), to indicate this. The variable 'cars'  is a
-    tuple of pairs like ('*', (26, 27)). The return result is a big tuple
-    of the 'cars' pairs along with the walls and goal pairs.""" 
+    """take (car, spot) tuples, automaticlly determine will walls are and goal, 
+       add them, return the tuple as seen in puzzle1"""
 
     goal = N*(N/2) - 1 
     top_walls = locs(0, N)
@@ -116,8 +119,6 @@ def grid(cars, N=N):
     bottom_walls = locs((N-1)*N, N)
     walls_with_goal = top_walls + tuple(i for y in side_walls for i in y) + bottom_walls 
     return cars + (('|', tuple(i for i in walls_with_goal if i is not goal)), ('@', (goal,))) 
-
-    
 
 def show(state, N=N):
     "Print a representation of a state as an NxN grid."
@@ -131,7 +132,6 @@ def show(state, N=N):
         print s,
         if i % N == N - 1: print
 
-# Here we see the grid and locs functions in use:
 
 puzzle1 = grid((
     ('*', locs(26, 2)),
@@ -160,5 +160,25 @@ def path_actions(path):
     "Return a list of actions in this path."
     return path[1::2]  
  
+class Test:"""
+>>> path_actions(solve_parking_puzzle(puzzle1))
+[('A', -3), ('Y', 24), ('B', 16), ('*', 4)]
+>>> path_actions(solve_parking_puzzle(puzzle2))
+[('B', -8), ('P', 1), ('O', -24), ('Y', -2), ('P', -1), ('B', 24), ('*', 4)]
+>>> path_actions(solve_parking_puzzle(puzzle3))
+[('B', -8), ('P', -3), ('O', -32), ('P', 3), ('Y', 3), ('B', 24), ('*', 5)]
+"""
+"""
+    puzzle3         puzzle2         puzzle1
+| | | | | | | | | | | | | | | | | | | | | | | |
+| . . . . . . | | . . . . . . | | G G . . . Y |
+| . . B . . . | | . . . B . . | | P . . B . Y |
+| * * B . . . @ | . * * B . . @ | P * * B . Y @
+| . . B P P P | | P P P B . . | | P . . B . . |
+| . . . . O . | | O . . . . . | | O . . . A A |
+| Y Y Y . O . | | O . Y Y Y . | | O . . . . . |
+| | | | | | | | | | | | | | | | | | | | | | | |
+"""
+print doctest.testmod()
 
 
