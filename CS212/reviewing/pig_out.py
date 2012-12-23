@@ -69,16 +69,23 @@ def hold(state):
     p, me, you, pending = state
     return other[p], you, pending+me, 0
 
-@memo
 def Pwin(state):
     (p, me, you, pending) = state
+    return Pwin2(me, you, pending)
+
+@memo
+def Pwin2(me, you, pending):
     if me + pending >= goal:
         return 1
     elif you >= goal: 
         return 0
-    else:
-        return max(Q_pig(state, action, Pwin)
-                   for action in P_actions(state))
+    else:                            # rolling a 1 (pigout)
+        roll_win_probability = (1 - Pwin2(you, me+1, 0) +
+                                sum(Pwin2(me, you, pending+d) 
+                                for d in (2, 3, 4, 5, 6))) / 6.
+    # my_prob_of_wining = (1 - Pwin2(opponent) + my_win_prob:( rolling 2,3..6))/ 6.0
+        return (roll_win_probability if not pending else
+                max(roll_win_probability, 1 - Pwin2(you, me+pending, 0)))
 
 # play pig using max winning differential 
 
