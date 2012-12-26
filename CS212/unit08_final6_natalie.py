@@ -5,50 +5,46 @@ def natalie(list):
     if len(list) < 2: return None
     results = []
     for pairs in combos(list):
-        w1, w2 = pairs
-        r = combine(w1, w2)
+        r = combine(*pairs)
         if r:
             results.append(r)
-    return sorted(results)[-1][-1] if results else None
+    return sorted(results) if results else None
 
 def combine(w1, w2):
-    if w1 in w2 or w2 in w1: return None
-    candidates = pre_sub_fixes(w1)
+    if (w1 in w2) or (w2 in w1): return None
+    candidates = pre_subs(w1)
     is_in_w2 = part_of(w2)
     for c in candidates:
-        if is_in_w2(c):
+        if is_in_w2(c) and valid(c, w1, w2):
             return three_parts(c, w1, w2)
     return None
 
+def valid(letters, w1, w2):
+    return (w1.startswith(letters) + w2.startswith(letters)) == 1
+
 def three_parts(letters, w1, w2):
     parts= form_word(letters, w1, w2)
-    if not parts: return
-    new_word = ''.join(parts)
-    scores = sum([calculate(*s) for s in zip(parts, (new_word,)*3, ('s', 'm', 'e'))], 12)
-    return scores, new_word
+    if not all(parts): return 
+    new_word = parts[0] + parts[-1]  
+    return calculate(*parts), new_word
 
 def form_word(L, w1, w2):
-    if w1.startswith(L) and w2.startswith(L):
-        return False
-    word = ((w2+w1)if w1.startswith(L) else
-            (w1+w2))
-    word = word.replace(L, '', 1) 
-    i = word.index(L)
-    return word[:i], L, word[i+len(L):]
+    x, y = w1.index(L), w2.index(L)
+    word = ((w2[:y], L,  w1) if not x else
+            (w1[:x], L,  w2))
+    return word 
+
 
 def combos(lists):
     return [i for i in itertools.combinations(lists,2)]
     
-def pre_sub_fixes(w):
-    return sorted([y for x in zip(*[(w[i:],w[:i]) for i in range(len(w))])
-                   for y in x if y], reverse=True, key=len)
+def pre_subs(w): 
+    return sorted([y for x in zip(*[(w[i:],w[:i]) for i in range(1, len(w))]) for y in x], reverse=True, key=len)
 
-def calculate(letters, word, part):
-    lw = len(word)
-    ll = len(letters)
-    div = 4. if part in 'se' else 2.
-    idea_l = lw / div 
-    return -abs(ll - idea_l) 
+def calculate(*words):
+    s, m, e = map(len, words)
+    t = s + m + e
+    return t - abs(s-t/4.) - abs(m-t/2.) - abs(e-t/4.)
 
 def part_of(y):
     return lambda x: x in y
@@ -92,3 +88,5 @@ class Test:"""
 """
 
 print doctest.testmod()
+
+
