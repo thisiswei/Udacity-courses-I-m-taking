@@ -38,24 +38,30 @@ def natalie(words):
 def valid(m, w1, w2): 
     return w1.startswith(m) + w2.startswith(m) == 1
 
-def three_parts(m, w1, w2):
-    L = len(m) 
-    parts = ((w1[:-L], m, w2[L:]) if w2.startswith(m) else
-             (w2[:w2.index(m)], m, w1[L:]))
-    if not all(parts): return 
-    return calculate(*parts), ''.join(parts) 
 
-def presubfixes(w):
-    mixes = [(w[i:],w[:i]) for i in range(1, len(w))] 
-    return sorted([y for x in mixes for y in x], key=len)[::-1]
+#     middle   word1     word2
+# ('phant', 'elephant', 'phantom') => 'ele + phant + om'
+#('int', 'intimate', 'hint') => 'h + int + imate' 
+
+def three_parts(m, w1, w2):
+    L = len(m)
+    parts = ((w1[:-L], m, w2[L:]) if w2.startswith(m) else 
+             (w2[:w2.index(m)], m, w1[L:]))
+    if not all(parts): return # if not compose of start, mid, end
+    return calculate(*parts), ''.join(parts) 
 
 def calculate(*words):
     s, m, e = map(len, words)
     t = s + m + e
     return t - abs(s-t/4.) - abs(m-t/2.) - abs(e-t/4.)
 
+# >>> presubfixes('kimono') 
+#['kimon', 'imono', 'kimo', 'mono', 'kim', 'ono', 'no', 'ki', 'o', 'k']   
 
-
+def presubfixes(w):
+    mixes = [(w[i:],w[:i]) for i in range(1, len(w))] 
+    return sorted([y for x in mixes for y in x], key=len)[::-1]
+ 
 
 
 
@@ -74,7 +80,7 @@ class Test:"""
 >>> natalie(['programmer', 'coder', 'partying', 'merrymaking'])
 [(6.0, 'programmerrymaking')]
 >>> natalie(['int', 'intimate', 'hinter', 'hint', 'winter'])
-[(3.5, 'hintimate'), (3.5, 'hintimate'), (3.5, 'wintimate')]  # why not wintimate ???
+[(3.5, 'hintimate'), (3.5, 'hintimate'), (3.5, 'wintimate')]  
 >>> natalie(['morass', 'moral', 'assassination'])
 [(4.0, 'morassassination')]
 >>> natalie(['entrepreneur', 'academic', 'doctor', 'neuropsychologist', 'neurotoxin', 'scientist', 'gist']) #
