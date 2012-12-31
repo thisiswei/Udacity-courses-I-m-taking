@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>new post</h2>
+     <form action="" method="post" accept-charset="utf-8">
+        <label for="">
+           <div>
+             suject
+           </div>
+           <input type="text" name="subject" id="" value="{{subject}}" />
+        </label>
+
+        <label for="">
+           <div>
+             art
+           </div>
+           <textarea name="content" id= rows="8" cols="80">{{content}}</textarea>
+        </label>
+        <input type="submit" name="" id="" value="hit me" />
+     </form>
+
+     <div class='error'>
+       {{error}}
+     </div>
+     <hr>  
+
+{% endblock %}
+

@@ -7,6 +7,8 @@ template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                autoescape = True)  
 
+                               
+#hw3 fro CS253
 
 def render_str(template, **params):
     t = jinja_env.get_template(template)
@@ -72,5 +74,6 @@ app = webapp2.WSGIApplication([
     ('/blogs/newpost', NewPost),
     ('/blogs/([0-9]+)',PostPage)
 ], debug=True)   
+
 
 
