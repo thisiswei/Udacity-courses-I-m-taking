@@ -1,3 +1,8 @@
+Dec/30 11:10pm
+reviewing CS253, my girl friend is leaving for NYC...
+I will miss her, but I can work harder now
+
+
 Dec/09 5:34pm
 ----
  started [CS313: Introduction to Theoretical Computer Science](http://udacity.com/cs313) and [Applied Cryptography (CS387)](http://www.udacity.com/overview/Course/cs387/CourseRev/apr2012)
