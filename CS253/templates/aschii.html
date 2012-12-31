@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  
+    <title>Arts</title>
+    
+  </head>
+  <style type="text/css" media="all">
+    body {
+      font-family: sans-serif;
+      width: 800px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    .error {
+      color: red
+    }
+
+    label {
+      display: block;
+      font-size: 15px;
+    }
+    input[type=text] {
+      width: 400px;
+      font-size: 20px;
+      padding: 2px;
+    }
+
+    textarea {
+      width: 400px;
+      height: 200px;
+      font-size: 18px;
+      font-family: monospace;
+    }
+
+    .art-title {
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .art-body{
+      margin: 0;
+      font-size: 17px;
+    }
+  </style>
+   <body>
+     <h1> Arts </h1>
+
+     <form action="" method="post" accept-charset="utf-8">
+        <label for="">
+           <div>
+             title
+           </div>
+           <input type="text" name="title" id="" value="{{title}}" />
+        </label>
+
+        <label for="">
+           <div>
+             art
+           </div>
+           <textarea name="art" id= rows="8" cols="80">{{art}}</textarea>
+        </label>
+        <input type="submit" name="" id="" value="hit me" />
+     </form>
+
+     <div class='error'>
+       {{error}}
+     </div>
+     <hr>
+     {% for art in arts %}
+      <div class='art'>
+        <div class='art-title'>
+          {{art.title}}
+        </div>
+        <pre class='art-body'>
+          {{art.art}}
+        </pre>
+      </div>
+     {% endfor %}
+   </body>
+</html>
+
