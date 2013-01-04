@@ -1,3 +1,6 @@
+#####Jan/3 5:38pm
+CS262
+
 Dec/30 11:10pm
 ----
 reviewing CS253, my girl friend is leaving for NYC...
