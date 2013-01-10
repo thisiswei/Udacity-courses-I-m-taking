@@ -66,3 +66,11 @@ def getRecommendations(prefs, person, similarity=sim_pearson):
                  for s, m in scoreT]
     return sorted(scoreAver, reverse=True)
 
+def transformdicts(D):
+    result = defaultdict(dict)
+    for k in D:
+        for val in D[k]:
+            result[val][k] = D[k][val]
+    return result
+
+
