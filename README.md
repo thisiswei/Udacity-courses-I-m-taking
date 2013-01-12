@@ -1,3 +1,6 @@
+#####Jan/12 12:50pm
+CS271 just finished unit 1... Peter and Sebastian is Damn awesome.
+
 #####Jan/3 5:38pm
 CS262
 
