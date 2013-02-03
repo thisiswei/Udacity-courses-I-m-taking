@@ -1,4 +1,5 @@
 from math import sqrt
+from collections import defaultdict
 
 critics={'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
       'Just My Luck': 3.0, 'Superman Returns': 3.5, 'You, Me and Dupree': 2.5,
@@ -73,4 +74,42 @@ def transformdicts(D):
             result[val][k] = D[k][val]
     return result
 
+def calculateSimilarItems(dicts, n=10):
+    results = {}
+    itemdicts = transformdicts(dicts)
+    c = 0
+    for item in itemdicts:
+        c += 1
+        if c % 100 == 0: print '%d / %d' % (c, len(itemdicts))
+        scores = topmatches(itemdicts, item, n=n, similarity=sim_distance)
+        results[item] = scores
+    return results
+
+def getRecommendedItems(dicts, itemmatch, user):
+    userRatings = dicts[user]
+    scores = {}
+    totalSim = {}
+    for item, rating in userRatings.items():
+        for similarity, item2 in itemmatch[item]:
+            if item2 in userRatings: continue
+            scores.setdefault(item2, 0)
+            scores[item2] += similarity*rating
+            totalSim.setdefault(item2, 0)
+            totalSim[item2] += similarity
+    rankings = [(score/totalSim[item], item) for item, score in scores.items()]
+    return sorted(rankings, reverse=True)
+
+
+def loadMovies(path='ML'):
+    movies = {}
+    for line in open(path+'/u.item'):
+        id, title = line.split('|')[:2]
+        movies[id] = title
+    dicts = defaultdict(dict)
+    for line in open(path+'/u.data'):
+        user, movieid, rating, ts = line.split('\t')
+        dicts[user][movies[movieid]] = float(rating)
+    return dicts
+
+   
 
